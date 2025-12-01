@@ -1,0 +1,18 @@
+from dataclasses import dataclass
+
+@dataclass
+
+class ArtefattiDTO:
+    nome:str
+    tipologia:str
+    epoca:str
+
+
+    def __str__(self):
+        return f"Nome: {self.nome}, Tipologia: {self.tipologia},Epoca: {self.epoca}"
+
+    def __repr__(self):
+        return self.__str__()
+
+    def __hash__(self):
+        return hash(self.nome)
