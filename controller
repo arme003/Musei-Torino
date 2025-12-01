@@ -1,0 +1,63 @@
+import flet as ft
+from view import View
+from model import Model
+
+class Controller:
+    def __init__(self, model: Model, view: View):
+        self.model = model
+        self.view = view
+
+
+    def popola_dd(self):
+
+        def popola_dd_musei():
+            lista=self.model.load_musei()
+            self.view.dd_musei.options.clear()
+            for id,value in lista:
+                self.view.dd_musei.options.append(ft.dropdown.Option(key=id,text=value))
+
+        def popola_dd_epoca():
+            lista=self.model.load_epoche()
+            self.view.dd_epoche.options.clear()
+            for item in lista:
+                self.view.dd_epoche.options.append(ft.dropdown.Option(key=item,text=item))
+
+        popola_dd_musei()
+        popola_dd_epoca()
+
+    def render(self,lista):
+        self.view.lista_view.controls.clear()
+        for item in lista:
+            self.view.lista_view.controls.append(ft.Text(item))
+        self.view.update()
+
+    def show(self,e):
+        museo=self.view.dd_musei.value
+        epoca=self.view.dd_epoche.value
+
+        if not epoca and not museo:
+            lista=self.model.load_all_artefatti()
+            if not lista:
+                self.view.set_alarm("Non ci sono musei disponibili")
+            self.render(lista)
+
+        elif not epoca and museo:
+            lista=self.model.load_artefatti_by_museo(museo)
+            if not lista:
+                self.view.set_alarm("Non ci sono musei disponibili")
+            self.render(lista)
+
+        elif not museo and epoca:
+            lista=self.model.load_artefatti_by_epoche(epoca)
+            if not lista:
+                self.view.set_alarm("Non ci sono musei disponibili")
+            self.render(lista)
+
+        else:
+            lista=self.model.load_artefatt_by_epoca_by_museo(epoca,museo)
+            if not lista:
+                self.view.set_alarm("Non ci sono musei disponibili")
+            self.render(lista)
+
+
+
