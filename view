@@ -1,0 +1,55 @@
+import flet as ft
+
+
+class View:
+    def __init__(self, page:ft.Page):
+        self.page = page
+        self.controller=None
+
+    def set_controller(self, controller):
+        self.controller = controller
+
+    def load_page(self):
+        self.page.title="Lab07"
+        self.page.scroll="auto"
+
+        #alarm
+        self.dsg=ft.AlertDialog(modal=False,bgcolor="red")
+
+        #1st row objects
+        self.txt_Musei=ft.Text(value="Musei di Torino",size=35)
+
+        #2nd row objects
+        self.dd_musei=ft.Dropdown(label="Museo")
+        self.dd_epoche=ft.Dropdown(label="Epoca")
+
+        #3rd row objects
+        btn=ft.ElevatedButton(text="Mostra Artefatti",on_click=self.controller.show)
+        self.lista_view=ft.ListView()
+
+        self.controller.popola_dd()
+
+        self.dsg=ft.AlertDialog(modal=False,bgcolor="red")
+
+        #build Page
+        self.page.add(
+            #1st row build
+            ft.Row([self.txt_Musei],alignment=ft.MainAxisAlignment.CENTER),
+            ft.Divider(),
+
+            #2nd row build
+            ft.Row([self.dd_musei,self.dd_epoche],alignment=ft.MainAxisAlignment.CENTER),
+            ft.Divider(),
+
+            #3rd row build
+            ft.Row([btn],alignment=ft.MainAxisAlignment.CENTER),
+            ft.Row([self.lista_view],alignment=ft.MainAxisAlignment.CENTER),
+        )
+
+    def update(self):
+        self.page.update()
+
+    def set_alarm(self,messaggio):
+        self.dsg.title=ft.Text(messaggio)
+        self.page.open(self.dsg)
+        self.update()
