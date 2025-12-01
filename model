@@ -1,0 +1,43 @@
+from dao import ArtefattiDAO
+
+class Model:
+    def __init__(self):
+        self.dao = ArtefattiDAO()
+
+    def load_musei(self):
+        lista=self.dao.read_musei()
+        if lista is None:
+            return None
+        return lista
+
+    def load_epoche(self):
+        lista=self.dao.read_epoche()
+        if lista is None:
+            return None
+        return lista
+
+    ##############################################################################
+
+    def load_all_artefatti(self):
+        lista=self.dao.read_all_artefatti()
+        if lista is None:
+            return None
+        return lista
+
+    def load_artefatti_by_museo(self,id_museo):
+        lista=self.dao.read_by_museo(id_museo)
+        if lista is None:
+            return None
+        return lista
+
+    def load_artefatti_by_epoche(self,epoca):
+        lista=self.dao.read_by_epoca(epoca)
+        if lista is None:
+            return None
+        return lista
+
+    def load_artefatt_by_epoca_by_museo(self,epoca,id_museo):
+        lista=self.dao.read_by_epoca_by_museo(epoca,id_museo)
+        if lista is None:
+            return None
+        return lista
