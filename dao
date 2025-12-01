@@ -1,0 +1,126 @@
+from DB_connect import DBConnect
+from dto import ArtefattiDTO
+
+class ArtefattiDAO:
+    def __init__(self):
+        pass
+
+    def read_musei(self):
+        results=[]
+        cnx=DBConnect.get_connection()
+        if cnx is None:
+            return None
+        cursor=cnx.cursor()
+        query="SELECT id,nome FROM museo"
+        try:
+            cursor.execute(query)
+            rows=cursor.fetchall()
+            for row in rows:
+                results.append([row[0],row[1]])
+        except Exception as e:
+            print(f"Errore nella query: {e}")
+        finally:
+            cursor.close()
+            cnx.close()
+        return results
+
+    def read_epoche(self):
+        results=[]
+        cnx=DBConnect.get_connection()
+        if cnx is None:
+            return None
+        cursor=cnx.cursor()
+        query="SELECT DISTINCT epoca FROM artefatto"
+        try:
+            cursor.execute(query)
+            rows=cursor.fetchall()
+            for row in rows:
+                results.append(row[0])
+        except Exception as e:
+            print(f"Errore nella query: {e}")
+        finally:
+            cursor.close()
+            cnx.close()
+        return results
+    ##############################################################################
+
+    def read_all_artefatti(self):
+        results=[]
+        cnx=DBConnect.get_connection()
+        if cnx is None:
+            return None
+        cursor=cnx.cursor(dictionary=True)
+        query="SELECT nome,tipologia,epoca FROM artefatto"
+        try:
+            cursor.execute(query)
+            rows=cursor.fetchall()
+            for row in rows:
+                r=ArtefattiDTO(row["nome"],row["tipologia"],row["epoca"])
+                results.append(r)
+        except Exception as e:
+            print(f"Errore nella query: {e}")
+        finally:
+            cursor.close()
+            cnx.close()
+        return results
+
+    def read_by_museo(self,id_museo):
+        results=[]
+        cnx=DBConnect.get_connection()
+        if cnx is None:
+            return None
+        cursor=cnx.cursor(dictionary=True)
+        query="SELECT nome,tipologia,epoca FROM artefatto WHERE id_museo=%s"
+        try:
+            cursor.execute(query,(id_museo,))
+            rows=cursor.fetchall()
+            for row in rows:
+                r=ArtefattiDTO(row["nome"],row["tipologia"],row["epoca"])
+                results.append(r)
+        except Exception as e:
+            print(f"Errore nella query: {e}")
+        finally:
+            cursor.close()
+            cnx.close()
+        return results
+
+    def read_by_epoca(self,epoca):
+        results=[]
+        cnx=DBConnect.get_connection()
+        if cnx is None:
+            return None
+        cursor=cnx.cursor(dictionary=True)
+        query="SELECT nome,tipologia,epoca FROM artefatto WHERE epoca=%s"
+        try:
+            cursor.execute(query,(epoca,))
+            rows=cursor.fetchall()
+            for row in rows:
+                r=ArtefattiDTO(row["nome"],row["tipologia"],row["epoca"])
+                results.append(r)
+        except Exception as e:
+            print(f"Errore nella query: {e}")
+        finally:
+            cursor.close()
+            cnx.close()
+        return results
+
+    def read_by_epoca_by_museo(self,epoca,id_museo):
+        results=[]
+        cnx=DBConnect.get_connection()
+        if cnx is None:
+            return None
+        cursor=cnx.cursor(dictionary=True)
+        query="SELECT nome,tipologia,epoca FROM artefatto WHERE epoca=%s AND id_museo=%s"
+        try:
+            cursor.execute(query,(epoca,id_museo))
+            rows=cursor.fetchall()
+            for row in rows:
+                r=ArtefattiDTO(row["nome"],row["tipologia"],row["epoca"])
+                results.append(r)
+        except Exception as e:
+            print(f"Errore nella query: {e}")
+        finally:
+            cursor.close()
+            cnx.close()
+        return results
+
